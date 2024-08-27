@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://514fd8avh1ug"]
+
+[ext_resource type="PackedScene" uid="uid://cw0b5g4373n27" path="res://Scenes/Environment/platform.tscn" id="1_heopf"]
+[ext_resource type="PackedScene" uid="uid://rbyo53im5wc4" path="res://Scenes/Characters/player.tscn" id="2_vflw8"]
+
+[node name="ArenaLevel" type="Node3D"]
+
+[node name="Platform" parent="." instance=ExtResource("1_heopf")]
+
+[node name="Player" parent="." instance=ExtResource("2_vflw8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6839, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66311, 5.61866)
