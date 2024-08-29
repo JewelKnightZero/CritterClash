@@ -1,20 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://514fd8avh1ug"]
+[gd_scene load_steps=4 format=3 uid="uid://514fd8avh1ug"]
 
 [ext_resource type="PackedScene" uid="uid://cw0b5g4373n27" path="res://Scenes/Environment/platform.tscn" id="1_heopf"]
 [ext_resource type="PackedScene" uid="uid://rbyo53im5wc4" path="res://Scenes/Characters/player.tscn" id="2_vflw8"]
+[ext_resource type="Script" path="res://Scripts/LevelCore/camera_3d.gd" id="2_wadle"]
 
 [node name="ArenaLevel" type="Node3D"]
 
 [node name="Platform" parent="." instance=ExtResource("1_heopf")]
 
-[node name="Player" parent="." instance=ExtResource("2_vflw8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6839, 0)
-
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66311, 10.6909)
+size = 15.0
+script = ExtResource("2_wadle")
 
 [node name="Platform2" parent="." instance=ExtResource("1_heopf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0345, 2.04465, -0.245484)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0345, 5.94664, -0.245484)
 
 [node name="Platform3" parent="." instance=ExtResource("1_heopf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2369, 2.04465, -0.245484)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2369, 5.8063, -0.245484)
+
+[node name="PlayerManager" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Player" parent="PlayerManager" instance=ExtResource("2_vflw8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6839, 0)
