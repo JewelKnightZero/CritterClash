@@ -11,4 +11,10 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6839, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66311, 5.61866)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66311, 10.6909)
+
+[node name="Platform2" parent="." instance=ExtResource("1_heopf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0345, 2.04465, -0.245484)
+
+[node name="Platform3" parent="." instance=ExtResource("1_heopf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2369, 2.04465, -0.245484)

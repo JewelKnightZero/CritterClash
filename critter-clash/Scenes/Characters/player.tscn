@@ -1,10 +1,59 @@
-[gd_scene load_steps=4 format=3 uid="uid://rbyo53im5wc4"]
+[gd_scene load_steps=18 format=3 uid="uid://rbyo53im5wc4"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_8howm"]
 [ext_resource type="Texture2D" uid="uid://b6mu0w8bfpbo2" path="res://TempAssets/Human/human_regular_hair.png" id="1_cqr0t"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1j2gu"]
 height = 1.5
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_ihf6j"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_suvm3"]
+animation = &"IdleLeft"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mcks0"]
+animation = &"IdleRight"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_tggk1"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_suvm3")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_mcks0")
+blend_point_1/pos = 1.0
+blend_mode = 1
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_6kxo6"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_imrem"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_evce4"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vufww"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m144i"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ukh0f"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ue84d"]
+states/Attack/node = SubResource("AnimationNodeBlendSpace1D_ihf6j")
+states/Attack/position = Vector2(517, 190)
+states/Idle/node = SubResource("AnimationNodeBlendSpace1D_tggk1")
+states/Idle/position = Vector2(422, 110)
+states/Roll/node = SubResource("AnimationNodeBlendSpace1D_6kxo6")
+states/Roll/position = Vector2(687, 121)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_imrem"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_evce4"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_vufww"), "Roll", "Idle", SubResource("AnimationNodeStateMachineTransition_m144i"), "Idle", "Roll", SubResource("AnimationNodeStateMachineTransition_ukh0f")]
+
+[sub_resource type="Animation" id="Animation_f6vqm"]
+resource_name = "IdleRight"
+
+[sub_resource type="Animation" id="Animation_k1ihr"]
+resource_name = "Idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lhyps"]
+_data = {
+"IdleLeft": SubResource("Animation_k1ihr"),
+"IdleRight": SubResource("Animation_f6vqm")
+}
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_8howm")
@@ -20,3 +69,15 @@ vframes = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75811, 0)
 shape = SubResource("CapsuleShape3D_1j2gu")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_ue84d")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Attack/blend_position = 0
+parameters/Idle/blend_position = -0.997015
+parameters/Roll/blend_position = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lhyps")
+}
