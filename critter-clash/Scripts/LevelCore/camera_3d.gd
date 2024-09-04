@@ -4,8 +4,8 @@ var maxDistance:float = 0
 var maxXDistance:float = 0
 var maxYDistance:float = 0
 const startingDistance: float = 10
-const maxCamDistance:float = 30
-const minCamDistance:float = 5
+@export var maxCamDistance:float = 30
+@export var minCamDistance:float = 5
 const camSpeed:float = 100
 
 func _physics_process(delta: float) -> void:

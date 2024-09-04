@@ -1,8 +1,10 @@
 extends CharacterBody3D
 
+#Everything for the player characters
+
 @onready var animationTree: AnimationTree = $AnimationTree
 @onready var animationState = animationTree.get("parameters/playback")
-@onready var sprite3d: Sprite3D = $Sprite3D
+@onready var groundRayCast: RayCast3D = $RayCast3D
 
 
 enum states {
@@ -14,12 +16,14 @@ enum states {
 var state: states = states.MOVE
 var rollVector: Vector3 = Vector3.RIGHT
 
-const speed: float = 100
-const maxSpeed: float = 60
-const friction: float = 800
-const rollSpeed: float = 1.5
-const jumpSpeed: float = 3000
-const gravity: float = 200
+@export var speed: float = 100
+@export var maxSpeed: float = 20
+@export var friction: float = 50
+@export var rollSpeed: float = 1.5
+@export var jumpSpeed: float = 3000
+@export var gravity: float = 200
+@export var jumps: int = 1
+@export var maxJumps: int = 1
 
 func _physics_process(delta: float) -> void:
 	
@@ -42,18 +46,22 @@ func MoveState(delta:float):
 		#animationTree.set("parameters/Attack/blend_position", inputVector)
 		#animationTree.set("parameters/Roll/blend_position", inputVector)
 		#animationState.travel("Run")
-		sprite3d.flip_h = true if inputVector.x < 0 else false
 		
 		velocity += Vector3(inputVector.x, inputVector.y, 0) * speed * delta
+		velocity.x = clamp(velocity.x, -maxSpeed, maxSpeed)
 	else:
 		animationState.travel("Idle")
-		velocity = velocity.move_toward(Vector3(0, velocity.y, 0), friction * delta)
 		
-	if Input.is_action_just_pressed("Jump") :
+	if Input.is_action_just_pressed("Jump") && jumps > 0 :
 			velocity.y += delta * jumpSpeed
+			jumps -= 1
+	
+	if groundRayCast.is_colliding():
+		velocity = velocity.move_toward(Vector3(0, velocity.y, 0), delta * friction)
+		jumps = maxJumps
 	
 	velocity.y -= gravity * delta
-	velocity = velocity.limit_length(maxSpeed)
+	
 	move_and_slide()
 	#if Input.is_action_just_pressed("Attack"):
 	#	state = states.ATTACK

@@ -8,10 +8,14 @@
 
 [node name="Platform" parent="." instance=ExtResource("1_heopf")]
 
+[node name="Platform4" parent="." instance=ExtResource("1_heopf")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -6.18346, 0)
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66311, 10.6909)
 size = 15.0
 script = ExtResource("2_wadle")
+minCamDistance = 20.0
 
 [node name="Platform2" parent="." instance=ExtResource("1_heopf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0345, 5.94664, -0.245484)
@@ -24,3 +28,8 @@ unique_name_in_owner = true
 
 [node name="Player" parent="PlayerManager" instance=ExtResource("2_vflw8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6839, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 0, 0)
+light_color = Color(1, 1, 0.721569, 1)
+directional_shadow_mode = 0

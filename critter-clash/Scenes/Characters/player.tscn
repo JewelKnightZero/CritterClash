@@ -1,24 +1,13 @@
-[gd_scene load_steps=18 format=3 uid="uid://rbyo53im5wc4"]
+[gd_scene load_steps=14 format=3 uid="uid://rbyo53im5wc4"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_8howm"]
-[ext_resource type="Texture2D" uid="uid://b6mu0w8bfpbo2" path="res://TempAssets/Human/human_regular_hair.png" id="1_cqr0t"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1j2gu"]
 height = 1.5
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_ihf6j"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_suvm3"]
-animation = &"IdleLeft"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mcks0"]
-animation = &"IdleRight"
-
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_tggk1"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_suvm3")
-blend_point_0/pos = -1.0
-blend_point_1/node = SubResource("AnimationNodeAnimation_mcks0")
-blend_point_1/pos = 1.0
 blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_6kxo6"]
@@ -43,31 +32,16 @@ states/Roll/node = SubResource("AnimationNodeBlendSpace1D_6kxo6")
 states/Roll/position = Vector2(687, 121)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_imrem"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_evce4"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_vufww"), "Roll", "Idle", SubResource("AnimationNodeStateMachineTransition_m144i"), "Idle", "Roll", SubResource("AnimationNodeStateMachineTransition_ukh0f")]
 
-[sub_resource type="Animation" id="Animation_f6vqm"]
-resource_name = "IdleRight"
-
-[sub_resource type="Animation" id="Animation_k1ihr"]
-resource_name = "Idle"
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lhyps"]
-_data = {
-"IdleLeft": SubResource("Animation_k1ihr"),
-"IdleRight": SubResource("Animation_f6vqm")
-}
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_at71b"]
+height = 1.5
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_8howm")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.909742, 0)
-pixel_size = 0.1
-texture_filter = 0
-texture = ExtResource("1_cqr0t")
-hframes = 9
-vframes = 2
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75811, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("CapsuleShape3D_1j2gu")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -81,3 +55,12 @@ parameters/Roll/blend_position = 0
 libraries = {
 "": SubResource("AnimationLibrary_lhyps")
 }
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("CapsuleMesh_at71b")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.1, 0)
+collide_with_areas = true
+debug_shape_custom_color = Color(0.666667, 0.529412, 1, 1)
