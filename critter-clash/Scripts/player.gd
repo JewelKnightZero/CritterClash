@@ -5,7 +5,8 @@ extends CharacterBody3D
 @onready var animationTree: AnimationTree = $AnimationTree
 @onready var animationState = animationTree.get("parameters/playback")
 @onready var groundRayCast: RayCast3D = $RayCast3D
-
+@onready var hurt_box: Area3D = $hurt_box
+@onready var TempTimer: Timer = $TempTimer
 
 enum states {
 	MOVE,
@@ -13,8 +14,13 @@ enum states {
 	ATTACK
 }
 
+@export var startPosition: Vector3
+var playerID = 0
+
 var state: states = states.MOVE
 var rollVector: Vector3 = Vector3.RIGHT
+var inputVector:Vector2 = Vector2.ZERO
+var jump:bool = false
 
 @export var speed: float = 100
 @export var maxSpeed: float = 20
@@ -24,6 +30,8 @@ var rollVector: Vector3 = Vector3.RIGHT
 @export var gravity: float = 200
 @export var jumps: int = 1
 @export var maxJumps: int = 1
+
+var hitPercent: float = 0
 
 func _physics_process(delta: float) -> void:
 	
@@ -36,7 +44,7 @@ func _physics_process(delta: float) -> void:
 			AttackState()
 
 func MoveState(delta:float):
-	var inputVector = Input.get_vector("MoveLeft", "MoveRight", "MoveUp", "MoveDown")
+
 	inputVector = inputVector.normalized()
 	
 	if inputVector != Vector2.ZERO:
@@ -49,12 +57,15 @@ func MoveState(delta:float):
 		
 		velocity += Vector3(inputVector.x, inputVector.y, 0) * speed * delta
 		velocity.x = clamp(velocity.x, -maxSpeed, maxSpeed)
+		
 	else:
 		animationState.travel("Idle")
 		
-	if Input.is_action_just_pressed("Jump") && jumps > 0 :
+	if jump && jumps > 0 :
+			jump = false
 			velocity.y += delta * jumpSpeed
 			jumps -= 1
+			
 	
 	if groundRayCast.is_colliding():
 		velocity = velocity.move_toward(Vector3(0, velocity.y, 0), delta * friction)
@@ -79,3 +90,26 @@ func RollState():
 	
 func AnimationFinished():
 	state = states.MOVE
+
+func OutOfBounds():
+	#the player is reset to position and uses next available character. for the demo this will just reset their position and hit percent
+	hitPercent = 0
+	global_position = startPosition
+	
+func Attack():
+	#A basic attack for testing purposes
+	hurt_box.get_child(0).disabled = false
+	hurt_box.get_child(1).visible = true
+	TempTimer.start(1)
+
+
+func _on_temp_timer_timeout() -> void:
+	hurt_box.get_child(0).disabled = true
+	hurt_box.get_child(1).visible = false
+
+
+func _on_hit_box_area_entered(area: Area3D) -> void:
+	hitPercent += 10
+	velocity.x -= 100 * (hitPercent / 100)
+	print(hitPercent)
+	

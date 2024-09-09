@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://rbyo53im5wc4"]
+[gd_scene load_steps=18 format=3 uid="uid://rbyo53im5wc4"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_8howm"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1j2gu"]
-height = 1.5
+[ext_resource type="Shape3D" uid="uid://0rmu6t666x5o" path="res://Scenes/Characters/player.tres" id="2_b43o4"]
+[ext_resource type="PackedScene" uid="uid://dkbhygy1k8u4n" path="res://Scenes/Characters/hit_box.tscn" id="3_alaun"]
+[ext_resource type="PackedScene" uid="uid://ct3jnkuuudat6" path="res://Scenes/Characters/hurt_box.tscn" id="4_mkf7e"]
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_ihf6j"]
 
@@ -37,12 +37,18 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_at71b"]
 height = 1.5
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_sv66y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3nsqc"]
+size = Vector3(0.5, 0.5, 0.5)
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_8howm")
+startPosition = Vector3(0, 0.7, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
-shape = SubResource("CapsuleShape3D_1j2gu")
+shape = ExtResource("2_b43o4")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_ue84d")
@@ -64,3 +70,29 @@ mesh = SubResource("CapsuleMesh_at71b")
 target_position = Vector3(0, -0.1, 0)
 collide_with_areas = true
 debug_shape_custom_color = Color(0.666667, 0.529412, 1, 1)
+
+[node name="hit_box" parent="." instance=ExtResource("3_alaun")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="CollisionShape3D" parent="hit_box" index="0"]
+shape = ExtResource("2_b43o4")
+
+[node name="hurt_box" parent="." instance=ExtResource("4_mkf7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07584, 0.881221, 0)
+
+[node name="CollisionShape3D" parent="hurt_box" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00979328, 1.19209e-07, -0.00205469)
+shape = SubResource("BoxShape3D_sv66y")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hurt_box"]
+visible = false
+mesh = SubResource("BoxMesh_3nsqc")
+
+[node name="TempTimer" type="Timer" parent="."]
+
+[connection signal="area_entered" from="hit_box" to="." method="_on_hit_box_area_entered"]
+[connection signal="timeout" from="TempTimer" to="." method="_on_temp_timer_timeout"]
+
+[editable path="hit_box"]
+[editable path="hurt_box"]
