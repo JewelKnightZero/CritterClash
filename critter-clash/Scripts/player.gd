@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var animationState = animationTree.get("parameters/playback")
 @onready var groundRayCast: RayCast3D = $RayCast3D
 @onready var hurt_box: Area3D = $hurt_box
+@onready var hurt_box2: Area3D = $hurt_box2
 @onready var TempTimer: Timer = $TempTimer
 
 enum states {
@@ -102,10 +103,17 @@ func Attack():
 	hurt_box.get_child(1).visible = true
 	TempTimer.start(1)
 
+func Attack2():
+	#A basic attack for testing purposes
+	hurt_box2.get_child(0).disabled = false
+	hurt_box2.get_child(1).visible = true
+	TempTimer.start(1)
 
 func _on_temp_timer_timeout() -> void:
 	hurt_box.get_child(0).disabled = true
 	hurt_box.get_child(1).visible = false
+	hurt_box2.get_child(0).disabled = true
+	hurt_box2.get_child(1).visible = false
 
 
 func _on_hit_box_area_entered(area: Area3D) -> void:

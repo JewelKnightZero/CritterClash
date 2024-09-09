@@ -89,6 +89,18 @@ disabled = true
 visible = false
 mesh = SubResource("BoxMesh_3nsqc")
 
+[node name="hurt_box2" parent="." instance=ExtResource("4_mkf7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07743, 0.881221, 0)
+
+[node name="CollisionShape3D" parent="hurt_box2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00979328, 1.19209e-07, -0.00205469)
+shape = SubResource("BoxShape3D_sv66y")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hurt_box2"]
+visible = false
+mesh = SubResource("BoxMesh_3nsqc")
+
 [node name="TempTimer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="hit_box" to="." method="_on_hit_box_area_entered"]
@@ -96,3 +108,4 @@ mesh = SubResource("BoxMesh_3nsqc")
 
 [editable path="hit_box"]
 [editable path="hurt_box"]
+[editable path="hurt_box2"]

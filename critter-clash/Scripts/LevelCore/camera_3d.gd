@@ -13,7 +13,7 @@ func _physics_process(delta: float) -> void:
 	#First we find the max distance to a player
 	maxXDistance = minCamDistance #Reset each frame to minimum distance
 	maxYDistance = minCamDistance
-	for child: CharacterBody3D in playerManager.get_children(): # Loop through players to find the furthest distances
+	for child: CharacterBody3D in playerManager.get_child(0).get_children(): # Loop through players to find the furthest distances
 		if maxXDistance < abs(child.global_position.x):
 			maxXDistance = abs(child.global_position.x)
 		if maxYDistance < abs(child.global_position.y):
